@@ -44,8 +44,9 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:ems="10"
-        android:inputType="textPersonName"
+        android:inputType="number"
         android:hint="No. of Operations"
+        android:digits="0123456789"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/text_view_operations"
         android:layout_marginLeft="16dp"
@@ -71,8 +72,8 @@
         android:layout_marginLeft="16dp"
         android:layout_marginTop="9dp" />
 
-    <GridView
-        android:id="@+id/grid_view_customers"
+    <ListView
+        android:id="@+id/list_view_customers"
         android:layout_width="344dp"
         android:layout_height="191dp"
         android:layout_marginLeft="20dp"
@@ -88,7 +89,18 @@
         android:text="CALCULATE QUEUE"
         android:gravity="center"
         app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/grid_view_customers"
+        app:layout_constraintTop_toBottomOf="@+id/list_view_customers"
+        android:layout_marginLeft="117dp"
+        android:layout_marginTop="19dp" />
+
+    <Button
+        android:id="@+id/button_reset"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="RESET"
+        android:gravity="center"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/button_calculateQueue"
         android:layout_marginLeft="117dp"
         android:layout_marginTop="19dp" />
 
