@@ -7,12 +7,89 @@
     tools:context="mx.cetys.jorgepayan.a23570_payan_examen01.MainActivity">
 
     <TextView
+        android:id="@+id/text_view_customer"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Hello World!"
-        app:layout_constraintBottom_toBottomOf="parent"
+        android:text="Customer"
         app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintTop_toBottomOf="parent"
+        android:layout_marginLeft="16dp"
+        android:layout_marginTop="-511dp" />
+
+    <EditText
+        android:id="@+id/edit_text_customer"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:ems="10"
+        android:inputType="textPersonName"
+        android:hint="Customer"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/text_view_customer"
+        android:layout_marginLeft="16dp"
+        android:layout_marginTop="-1dp" />
+
+    <TextView
+        android:id="@+id/text_view_operations"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="No. of Operations:"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/edit_text_customer"
+        android:layout_marginLeft="16dp"
+        android:layout_marginTop="0dp" />
+
+    <EditText
+        android:id="@+id/edit_text_operations"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:ems="10"
+        android:inputType="textPersonName"
+        android:hint="No. of Operations"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/text_view_operations"
+        android:layout_marginLeft="16dp"
+        android:layout_marginTop="0dp" />
+
+    <Button
+        android:id="@+id/button_addCustomer"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="ADD CUSTOMER"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/edit_text_operations"
+        android:layout_marginLeft="16dp"
+        android:layout_marginTop="0dp" />
+
+    <TextView
+        android:id="@+id/text_view_customers"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Customers:"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/button_addCustomer"
+        android:layout_marginLeft="16dp"
+        android:layout_marginTop="9dp" />
+
+    <GridView
+        android:id="@+id/grid_view_customers"
+        android:layout_width="344dp"
+        android:layout_height="191dp"
+        android:layout_marginLeft="20dp"
+        android:layout_marginTop="9dp"
+        android:gravity="center"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/text_view_customers" />
+
+    <Button
+        android:id="@+id/button_calculateQueue"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="CALCULATE QUEUE"
+        android:gravity="center"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/grid_view_customers"
+        android:layout_marginLeft="117dp"
+        android:layout_marginTop="19dp" />
 
 </android.support.constraint.ConstraintLayout>
