@@ -1,5 +1,6 @@
 package mx.cetys.jorgepayan.a23570_payan_examen01;
 
+import android.content.Context;
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -7,6 +8,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ListView;
+import android.widget.Toast;
 
 import java.util.ArrayList;
 
@@ -41,25 +43,45 @@ public class MainActivity extends AppCompatActivity {
         button_addCustomer.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                visitNo++;
                 String customerName = edit_text_customer.getText().toString();
-                int numberOfOperations =
-                        Integer.parseInt(edit_text_operations.getText().toString());
-                CustomerVisit visit = makeCustomerVisit(visitNo, customerName, numberOfOperations);
-                customerVisits.add(visit);
-                fillCustomerVisitView(customerVisits);
-                edit_text_customer.setText("");
-                edit_text_operations.setText("");
+                String operationsField = edit_text_operations.getText().toString();
+                if(!customerName.isEmpty() || !operationsField.isEmpty()) {
+                    visitNo++;
+                    int numberOfOperations = Integer.parseInt(operationsField);
+                    CustomerVisit visit = makeCustomerVisit(visitNo, customerName, numberOfOperations);
+                    customerVisits.add(visit);
+                    fillCustomerVisitView(customerVisits);
+                    edit_text_customer.setText("");
+                    edit_text_operations.setText("");
+                }
+                else {
+                    Context context = getApplicationContext();
+                    CharSequence text = "Please fill out all the fields.";
+                    int duration = Toast.LENGTH_SHORT;
+
+                    Toast toast = Toast.makeText(context, text, duration);
+                    toast.show();
+                }
             }
         });
 
         button_calculateQueue.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                turns = calculateQueue(customerVisits);
-                Intent intent = new Intent(getApplicationContext(), QueueListActivity.class);
-                intent.putExtra(EXTRA_KEY, turns);
-                startActivity(intent);
+                if(customerVisits.size() > 0) {
+                    turns = calculateQueue(customerVisits);
+                    Intent intent = new Intent(getApplicationContext(), QueueListActivity.class);
+                    intent.putExtra(EXTRA_KEY, turns);
+                    startActivity(intent);
+                }
+                else {
+                    Context context = getApplicationContext();
+                    CharSequence text = "You must add customers first.";
+                    int duration = Toast.LENGTH_SHORT;
+
+                    Toast toast = Toast.makeText(context, text, duration);
+                    toast.show();
+                }
             }
         });
 
@@ -68,6 +90,7 @@ public class MainActivity extends AppCompatActivity {
             public void onClick(View view) {
                 customerVisits.clear();
                 customerVisitAdapter.clear();
+                visitNo = 0;
             }
         });
 
@@ -90,7 +113,8 @@ public class MainActivity extends AppCompatActivity {
         }
         int listIndex = 0;
         int turn = 1;
-        for (int i = 0; i <= iterations; i++) {
+
+        while(iterations != 0) {
             if(listIndex >= customerVisitArray.size()) {
                 listIndex = 0;
             }
@@ -105,6 +129,7 @@ public class MainActivity extends AppCompatActivity {
                 operations[1]++;
                 visit.setOperations(operations);
                 turn++;
+                iterations--;
             }
             listIndex++;
         }
