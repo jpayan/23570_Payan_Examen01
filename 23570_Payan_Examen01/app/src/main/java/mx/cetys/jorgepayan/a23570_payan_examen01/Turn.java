@@ -12,8 +12,8 @@ public class Turn implements Parcelable {
     private String customer;
     private int currentOperation;
 
-    public Turn(int turno, String customer, int currentOperation) {
-        this.turn = turno;
+    public Turn(int turn, String customer, int currentOperation) {
+        this.turn = turn;
         this.customer = customer;
         this.currentOperation = currentOperation;
     }

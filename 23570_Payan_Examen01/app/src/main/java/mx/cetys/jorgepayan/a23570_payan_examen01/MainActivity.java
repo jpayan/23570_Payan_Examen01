@@ -9,8 +9,13 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.Toast;
+import android.widget.AdapterView;
+import android.widget.AdapterView.OnItemClickListener;
 
 import java.util.ArrayList;
+
+import mx.cetys.jorgepayan.a23570_payan_examen01.Utils.CustomerHelper;
+import mx.cetys.jorgepayan.a23570_payan_examen01.Utils.DBUtils;
 
 public class MainActivity extends AppCompatActivity {
     public final static String EXTRA_KEY = "Message";
@@ -20,7 +25,7 @@ public class MainActivity extends AppCompatActivity {
     private EditText edit_text_operations;
     private ArrayList<CustomerVisit> customerVisits;
     private ArrayList<Turn> turns;
-    private CustomerVisitAdapter customerVisitAdapter;
+    private ListView list_view_customers;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -29,14 +34,19 @@ public class MainActivity extends AppCompatActivity {
 
         edit_text_customer = (EditText) findViewById(R.id.edit_text_customer);
         edit_text_operations = (EditText) findViewById(R.id.edit_text_operations);
+
         Button button_addCustomer = (Button) findViewById(R.id.button_addCustomer);
         Button button_calculateQueue = (Button) findViewById(R.id.button_calculateQueue);
         Button button_reset = (Button) findViewById(R.id.button_reset);
-        final ListView list_view_customers = (ListView) findViewById(R.id.list_view_customers);
+
+        list_view_customers = (ListView) findViewById(R.id.list_view_customers);
+        final CustomerHelper helper = new CustomerHelper(getApplicationContext());
+
+        final CustomerVisitAdapter customerVisitAdapter = new CustomerVisitAdapter(this);
+        list_view_customers.setAdapter(customerVisitAdapter);
 
         customerVisits = new ArrayList<CustomerVisit>();
-        customerVisitAdapter = new CustomerVisitAdapter(this);
-        list_view_customers.setAdapter(customerVisitAdapter);
+        getCustomerVisits(helper, customerVisitAdapter);
 
         turns = new ArrayList<Turn>();
 
@@ -45,12 +55,10 @@ public class MainActivity extends AppCompatActivity {
             public void onClick(View view) {
                 String customerName = edit_text_customer.getText().toString();
                 String operationsField = edit_text_operations.getText().toString();
-                if(!customerName.isEmpty() || !operationsField.isEmpty()) {
+                if(!customerName.isEmpty() && !operationsField.isEmpty()) {
                     visitNo++;
                     int numberOfOperations = Integer.parseInt(operationsField);
-                    CustomerVisit visit = makeCustomerVisit(visitNo, customerName, numberOfOperations);
-                    customerVisits.add(visit);
-                    fillCustomerVisitView(customerVisits);
+                    addCustomerVisit(helper, customerVisitAdapter, visitNo, customerName, numberOfOperations);
                     edit_text_customer.setText("");
                     edit_text_operations.setText("");
                 }
@@ -90,19 +98,22 @@ public class MainActivity extends AppCompatActivity {
             public void onClick(View view) {
                 customerVisits.clear();
                 customerVisitAdapter.clear();
+                clearTable(helper, DBUtils.CUSTOMER_VISITS_TABLE_NAME);
                 visitNo = 0;
             }
         });
 
-    }
-    private CustomerVisit makeCustomerVisit(int position, String customerName, int numberOfOperations) {
-        CustomerVisit visit = new CustomerVisit(
-            position,
-            customerName,
-            numberOfOperations,
-            1
-        );
-        return visit;
+        list_view_customers.setOnItemClickListener(new OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                CustomerVisit customerVisit = customerVisits.get(position);
+                deleteCustomerVisit(helper, customerVisit.getPosition());
+                getCustomerVisits(helper, customerVisitAdapter);
+                if(customerVisits.isEmpty()) {
+                    visitNo = 0;
+                }
+            }
+        });
     }
 
     private ArrayList<Turn> calculateQueue(ArrayList<CustomerVisit> customerVisitArray) {
@@ -113,7 +124,6 @@ public class MainActivity extends AppCompatActivity {
         }
         int listIndex = 0;
         int turn = 1;
-
         while(iterations != 0) {
             if(listIndex >= customerVisitArray.size()) {
                 listIndex = 0;
@@ -145,11 +155,40 @@ public class MainActivity extends AppCompatActivity {
         return turn;
     }
 
-    private void fillCustomerVisitView(ArrayList<CustomerVisit> customerVisitList) {
+    private void fillCustomerVisitView(CustomerVisitAdapter customerVisitAdapter, ArrayList<CustomerVisit> customerVisitList) {
         customerVisitAdapter.clear();
 
         for(CustomerVisit visit : customerVisitList) {
             customerVisitAdapter.add(visit);
         }
+    }
+
+    private void getCustomerVisits(CustomerHelper helper, CustomerVisitAdapter customerVisitAdapter) {
+        helper.open();
+        if(helper.getAllCustomerVisits().size() >= 0) {
+            customerVisits = helper.getAllCustomerVisits();
+            fillCustomerVisitView(customerVisitAdapter, customerVisits);
+        }
+        helper.close();
+    }
+
+    private void addCustomerVisit(CustomerHelper helper, CustomerVisitAdapter customerVisitAdapter, int position, String name, int operations) {
+        helper.open();
+        helper.addCustomerVisit(position, name, operations, 1);
+        getCustomerVisits(helper, customerVisitAdapter);
+        helper.close();
+    }
+
+    private void deleteCustomerVisit(CustomerHelper helper, int position) {
+        helper.open();
+        int customerVisitId = helper.getCustomerVisitId(position);
+        helper.deleteCustomerVisit(customerVisitId);
+        helper.close();
+    }
+
+    private void clearTable(CustomerHelper helper, String tableName) {
+        helper.open();
+        helper.clearTable(tableName);
+        helper.close();
     }
 }

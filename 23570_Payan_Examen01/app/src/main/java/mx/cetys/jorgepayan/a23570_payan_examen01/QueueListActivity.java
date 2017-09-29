@@ -27,7 +27,7 @@ public class QueueListActivity extends AppCompatActivity {
         listView.setAdapter(turnAdapter);
 
         turns = intent.getParcelableArrayListExtra(MainActivity.EXTRA_KEY);
-        fillMovieView(turns);
+        fillTurnView(turns);
     }
 
     @Override
@@ -35,7 +35,7 @@ public class QueueListActivity extends AppCompatActivity {
         finish();
     }
 
-    private void fillMovieView(ArrayList<Turn> turnList) {
+    private void fillTurnView(ArrayList<Turn> turnList) {
         turnAdapter.clear();
 
         for(Turn turn : turns) {
