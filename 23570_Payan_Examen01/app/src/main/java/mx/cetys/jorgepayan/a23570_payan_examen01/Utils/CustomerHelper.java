@@ -19,13 +19,15 @@ public class CustomerHelper {
     private SQLiteDatabase database;
     private String[] CUSTOMER_VISITS_TABLE_COLUMNS = {
             DBUtils.CUSTOMER_ID,
+            DBUtils.CUSTOMER_CODE,
             DBUtils.CUSTOMER_POSITION,
             DBUtils.CUSTOMER_NAME,
-            DBUtils.CUSTOMER_OPEREATIONS,
-            DBUtils.CUSTOMER_CURRENT_OPERATION
+            DBUtils.CUSTOMER_OPERATIONS,
+            DBUtils.CUSTOMER_CURRENT_OPERATION,
+            DBUtils.CUSTOMER_DATE_ADDED
     };
 
-    public CustomerHelper(Context context){
+    public CustomerHelper(Context context) {
         dbHelper = new DBUtils(context);
     }
 
@@ -37,10 +39,10 @@ public class CustomerHelper {
         dbHelper.close();
     }
 
-    public ArrayList<CustomerVisit> getAllCustomerVisits() {
+    public ArrayList<CustomerVisit> getCustomerVisits(String date) {
         ArrayList<CustomerVisit> customerVisits = new ArrayList<>();
         Cursor cursor = database.query(DBUtils.CUSTOMER_VISITS_TABLE_NAME, CUSTOMER_VISITS_TABLE_COLUMNS,
-                null, null, null, null, null);
+                DBUtils.CUSTOMER_DATE_ADDED + " = '" + date + "'", null, null, null, null);
 
         cursor.moveToFirst();
         while(!cursor.isAfterLast()) {
@@ -52,32 +54,28 @@ public class CustomerHelper {
         return customerVisits;
     }
 
-    public CustomerVisit addCustomerVisit(int position, String name, int operations, int currentOperation) {
+    public void addCustomerVisit(String code, int position, String name, int operations,
+                                          int currentOperation, String dateAdded) {
         ContentValues values = new ContentValues();
 
+        values.put(DBUtils.CUSTOMER_CODE, code);
         values.put(DBUtils.CUSTOMER_POSITION, position);
         values.put(DBUtils.CUSTOMER_NAME, name);
-        values.put(DBUtils.CUSTOMER_OPEREATIONS, operations);
+        values.put(DBUtils.CUSTOMER_OPERATIONS, operations);
         values.put(DBUtils.CUSTOMER_CURRENT_OPERATION, currentOperation);
+        values.put(DBUtils.CUSTOMER_DATE_ADDED, dateAdded);
 
-        long customerVisitId = database.insert(DBUtils.CUSTOMER_VISITS_TABLE_NAME, null, values);
-
-        Cursor cursor = database.query(DBUtils.CUSTOMER_VISITS_TABLE_NAME, CUSTOMER_VISITS_TABLE_COLUMNS,
-                DBUtils.CUSTOMER_ID + " = " + customerVisitId, null, null, null, null);
-
-        cursor.moveToFirst();
-        CustomerVisit customerVisit = parseCustomerVisit(cursor);
-        cursor.close();
-
-        return customerVisit;
+        database.insert(DBUtils.CUSTOMER_VISITS_TABLE_NAME, null, values);
     }
 
     public void deleteCustomerVisit(int customerVisitId) {
         database.delete(DBUtils.CUSTOMER_VISITS_TABLE_NAME, DBUtils.CUSTOMER_ID + " = " + customerVisitId, null);
     }
 
-    public int getCustomerVisitId(int position) {
-        Cursor cursor = database.query(DBUtils.CUSTOMER_VISITS_TABLE_NAME, new String[] {DBUtils.CUSTOMER_ID}, DBUtils.CUSTOMER_POSITION + " = " + position, null, null, null, null);
+    public int getCustomerVisitId(String code) {
+        Cursor cursor = database.query(DBUtils.CUSTOMER_VISITS_TABLE_NAME,
+                new String[] {DBUtils.CUSTOMER_ID}, DBUtils.CUSTOMER_CODE + " = " + code,
+                null, null, null, null);
         cursor.moveToFirst();
         int id = cursor.getInt(cursor.getColumnIndex(DBUtils.CUSTOMER_ID));
         return id;
@@ -88,11 +86,16 @@ public class CustomerHelper {
     }
 
     private CustomerVisit parseCustomerVisit(Cursor cursor) {
+        String code = cursor.getString(cursor.getColumnIndex(DBUtils.CUSTOMER_CODE));
         int position = cursor.getInt(cursor.getColumnIndex(DBUtils.CUSTOMER_POSITION));
         String name = cursor.getString(cursor.getColumnIndex(DBUtils.CUSTOMER_NAME));
-        int operations = cursor.getInt(cursor.getColumnIndex(DBUtils.CUSTOMER_OPEREATIONS));
+        int operations = cursor.getInt(cursor.getColumnIndex(DBUtils.CUSTOMER_OPERATIONS));
         int currentOperation = cursor.getInt(cursor.getColumnIndex(DBUtils.CUSTOMER_CURRENT_OPERATION));
-        CustomerVisit customerVisit = new CustomerVisit(position, name, operations, currentOperation);
+        String dateAdded = cursor.getString(cursor.getColumnIndex(DBUtils.CUSTOMER_DATE_ADDED));
+
+        CustomerVisit customerVisit = new CustomerVisit(code, position, name, operations,
+                currentOperation, dateAdded);
+
         return customerVisit;
     }
 }

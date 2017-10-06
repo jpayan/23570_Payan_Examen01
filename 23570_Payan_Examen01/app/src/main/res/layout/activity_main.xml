@@ -6,26 +6,60 @@
     android:layout_height="match_parent"
     tools:context="mx.cetys.jorgepayan.a23570_payan_examen01.MainActivity">
 
-    <TextView
-        android:id="@+id/text_view_customer"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Customer"
-        app:layout_constraintLeft_toLeftOf="parent"
+    <Button
+        android:id="@+id/button_date"
+        app:layout_constraintRight_toLeftOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintTop_toBottomOf="parent"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true"
+        android:background="#002196F3"
+        android:onClick="setDate" />
+
+    <TextView
+        android:id="@+id/text_view_customer_code"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Code"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintBaseline_toBaselineOf="@+id/button_date"
         android:layout_marginLeft="16dp"
         android:layout_marginTop="-511dp" />
 
     <EditText
-        android:id="@+id/edit_text_customer"
+        android:id="@+id/edit_text_customer_code"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:ems="10"
+        android:inputType="textPersonName"
+        android:hint="Code"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/text_view_customer_code"
+        android:layout_marginLeft="16dp"
+        android:layout_marginTop="-1dp" />
+
+
+    <TextView
+        android:id="@+id/text_view_customer_name"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Customer"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/edit_text_customer_code"
+        android:layout_marginLeft="16dp"
+        android:layout_marginTop="-511dp" />
+
+    <EditText
+        android:id="@+id/edit_text_customer_name"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:ems="10"
         android:inputType="textPersonName"
         android:hint="Customer"
         app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/text_view_customer"
+        app:layout_constraintTop_toBottomOf="@+id/text_view_customer_name"
         android:layout_marginLeft="16dp"
         android:layout_marginTop="-1dp" />
 
@@ -35,7 +69,7 @@
         android:layout_height="wrap_content"
         android:text="No. of Operations:"
         app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/edit_text_customer"
+        app:layout_constraintTop_toBottomOf="@+id/edit_text_customer_name"
         android:layout_marginLeft="16dp"
         android:layout_marginTop="0dp" />
 

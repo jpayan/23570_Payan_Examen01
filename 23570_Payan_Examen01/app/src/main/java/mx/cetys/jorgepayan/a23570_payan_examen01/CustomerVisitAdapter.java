@@ -23,13 +23,15 @@ public class CustomerVisitAdapter extends ArrayAdapter<CustomerVisit> {
     public View getView(int position, @Nullable View convertView, @NonNull ViewGroup parent) {
         View oView = super.getView(position, convertView, parent);
 
+        TextView customerCode = (TextView) oView.findViewById(R.id.customerCode);
         TextView customerPosition = (TextView) oView.findViewById(R.id.customerPosition);
         TextView customerName = (TextView) oView.findViewById(R.id.customerName);
         TextView operations = (TextView) oView.findViewById(R.id.operations);
 
         CustomerVisit customerVisit = this.getItem(position);
-        customerPosition.setText("Num: " + String.valueOf(customerVisit.getPosition()));
-        customerName.setText("Customer: " + customerVisit.getCustomer());
+        customerCode.setText("Code: " + String.valueOf(customerVisit.getCustomerCode()));
+        customerPosition.setText("Position: " + String.valueOf(customerVisit.getPosition()));
+        customerName.setText("Customer: " + customerVisit.getName());
         operations.setText("Operations: " + String.valueOf(customerVisit.getOperations()[0]));
 
         return oView;

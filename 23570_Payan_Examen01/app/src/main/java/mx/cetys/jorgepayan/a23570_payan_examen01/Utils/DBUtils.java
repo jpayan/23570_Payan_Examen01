@@ -14,18 +14,22 @@ public class DBUtils extends SQLiteOpenHelper {
 
     public static final String CUSTOMER_VISITS_TABLE_NAME = "CUSTOMER_VISITS";
     public static final String CUSTOMER_ID = "id";
+    public static final String CUSTOMER_CODE = "code";
     public static final String CUSTOMER_POSITION = "position";
     public static final String CUSTOMER_NAME = "customer";
-    public static final String CUSTOMER_OPEREATIONS = "number_of_operations";
+    public static final String CUSTOMER_OPERATIONS = "number_of_operations";
     public static final String CUSTOMER_CURRENT_OPERATION = "current_operation";
+    public static final String CUSTOMER_DATE_ADDED = "date_added";
 
     public static final String DATABASE_CREATE =
             "CREATE TABLE " + CUSTOMER_VISITS_TABLE_NAME + "(" +
                     CUSTOMER_ID + " integer primary key autoincrement, " +
+                    CUSTOMER_CODE + " text not null, " +
                     CUSTOMER_POSITION + " integer not null, " +
                     CUSTOMER_NAME + " text not null, " +
-                    CUSTOMER_OPEREATIONS + "  integer not null, " +
-                    CUSTOMER_CURRENT_OPERATION + " integer not null" +
+                    CUSTOMER_OPERATIONS + "  integer not null, " +
+                    CUSTOMER_CURRENT_OPERATION + " integer not null," +
+                    CUSTOMER_DATE_ADDED + " text not null" +
             ")";
 
     public DBUtils(Context context) {
